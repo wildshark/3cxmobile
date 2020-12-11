@@ -37,9 +37,6 @@ if(!isset($_REQUEST['_submit'])){
                     $context = "view/file.details.php";
                     require("frame/table.php");
                 break;
-        
-                
-        
             }
         }   
     }
@@ -121,7 +118,7 @@ if(!isset($_REQUEST['_submit'])){
                    // window.location = \"index.php\"
               //  </script>";
                 }
-                
+
                 fclose($file);  
             }
         }
