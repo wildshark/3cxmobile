@@ -47,20 +47,20 @@
 							<div class="login-box-plain">
 								<h2 class="bigintro">Sign In</h2>
 								<div class="divide-40"></div>
-								<form role="form">
+								<form method="post" action="index.php" role="form">
 								  <div class="form-group">
 									<label for="exampleInputEmail1">Email address</label>
 									<i class="fa fa-envelope"></i>
-									<input type="email" class="form-control" id="exampleInputEmail1">
+									<input type="text" name="username" class="form-control" id="exampleInputEmail1">
 								  </div>
 								  <div class="form-group"> 
 									<label for="exampleInputPassword1">Password</label>
 									<i class="fa fa-lock"></i>
-									<input type="password" class="form-control" id="exampleInputPassword1">
+									<input type="password"  name="password" class="form-control" id="exampleInputPassword1">
 								  </div>
 								  <div class="form-actions">
 									<label class="checkbox"> <input type="checkbox" class="uniform" value=""> Remember me</label>
-									<button type="submit" class="btn btn-danger">Submit</button>
+									<button type="submit" name="_submit" value="login" class="btn btn-danger">Submit</button>
 								  </div>
 								</form>
 								<!-- SOCIAL LOGIN -->
@@ -170,7 +170,7 @@
 								  <div class="form-group">
 									<label for="exampleInputEmail1">Enter your Email address</label>
 									<i class="fa fa-envelope"></i>
-									<input type="email" class="form-control" id="exampleInputEmail1">
+									<input type="text" name='username' class="form-control" id="exampleInputEmail1">
 								  </div>
 								  <div class="form-actions">
 									<button type="submit" class="btn btn-info">Send Me Reset Instructions</button>

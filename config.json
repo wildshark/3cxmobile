@@ -1,15 +1,16 @@
 {
-    "domain_name":"",
-    "server_ip":"",
+    "server":"localhost",
     "db_connection":{
         "host":"localhost",
         "username":"root",
         "password":"",
-        "database":"",
-        "port":"3360"
+        "database":"voip_mobile",
+        "port":"3306"
     },
-    "license":{
-        "product_key":"",
-        "product_cerificate":""
+    "cerificate":{
+        "app_name":"3cxMobile",
+        "version":"1.0",
+        "token":"6368faf1540525b1f40ce5dda73d1715",
+        "license":"20201121"
     }
 }

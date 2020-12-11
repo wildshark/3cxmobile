@@ -2,35 +2,133 @@
 
 session_start();
 
+include("control/global.php");
 include("module/connection.php");
-
+$conn = connection($config);
 
 if(!isset($_REQUEST['_submit'])){
-    if(!isset($_REQUEST['_route'])){
+    if(!isset($_REQUEST['_p'])){
         session_destroy();
         require "frame/login.php";
     }else{
+        if((!isset($_COOKIE['token'])) || (!isset($_SESSION['token']))){
+            $url["user"] = "log";
+            $url['log'] = "off";
 
-        switch($_REQUEST['_route']){
+            header("location: ?".http_build_query($url));
+        }else{
+            switch($_REQUEST['_p']){
 
-            case"login";
-            
-            break;
-    
-            
-    
-        }
+                case"dashboard";
+                    $context = "view/file.main.php";
+                    require("frame/table.php");
+                break;
 
+                case"upload";
+                    $context = "view/upload.php";
+                    require("frame/form.php");
+                break;
+
+                case"file";
+                    $file = hex2bin($_GET['file']);
+                    $file = explode("/",$file);
+                    $id = $file[0];
+                    $date = $file[1];
+                    $context = "view/file.details.php";
+                    require("frame/table.php");
+                break;
+        
+                
+        
+            }
+        }   
     }
 }else{
     switch($_REQUEST['_submit']){
 
         case"login";
+            $token = liecnse($config);
+            $_SESSION['token'] = $token['data'];
+            if($token == false){
+                echo "license error";
+            }else{
+                $q[] = $_REQUEST['username'];
+                $q[] = $_REQUEST['password'];
+                $sql ="SELECT * FROM `user_account` WHERE `username`=? AND `password`=?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ss",$q[0],$q[1]);
         
+                $stmt->execute();
+                
+                $result = $stmt->get_result();
+                if($result->num_rows == 0){
+                    session_destroy();
+                    require "frame/login.php";
+                } else{
+                    $r = $result->fetch_assoc();
+                    $_SESSION['user_id'] = $r['user_id'];
+                    setcookie("token", $token['data'], time()+3600);
+                    setcookie("username", $_REQUEST['username']);
+                    $url['_p'] = "dashboard";
+                    $url['token'] = $_SESSION['token'];
+                    $url['e']=200;
+                }
+            }        
         break;
 
+        case"upload";
+        $q[] = $_SESSION['user_id'];
+        $q[] = $_REQUEST['file-name'];
+        $q[] = $_FILES["file"]["tmp_name"];
+        $q[] = date("Y-m-d H:i:s");
+        $sql="INSERT INTO `mobile_file`(`user_id`, `file`) VALUES (?,?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss",$q[0],$q[1]);
+        
+        if(false == $stmt->execute()){
+            $url['_p'] = "upload";
+            $url['token'] = $_SESSION['token'];
+            $url['e']=400;
+        }else{
+            $file_id = $conn->insert_id;
+            $user_id = $_SESSION['user_id'];
+            $filename=$_FILES["file"]["tmp_name"];    
+            if($_FILES["file"]["size"] > 0){
+                
+                $file = fopen($filename, "r");
+                while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
+                    $sql = "INSERT into `mobile` (`file_id`, `user_id`, `mobile`) values ('".$file_id."','".$user_id."','".$getData[0]."')";
+                    $result = mysqli_query($conn, $sql);
+                }
 
+                if(!isset($result)){
+                    $url['_p'] = "dashboard";
+                    $url['token'] = $_SESSION['token'];
+                    $url['e']=400;
+                   // echo "<script type=\"text/javascript\">
+                    //    alert(\"Invalid File:Please Upload CSV File.\");
+                    //    window.location = \"index.php\"
+                    //    </script>"; 
 
+                }else {
+                    $url['_p'] = "dashboard";
+                    $url['file'] = $_REQUEST['file-name'];
+
+                    $url['token'] = $_SESSION['token'];
+                    $url['e']=400;
+                   // echo "<script type=\"text/javascript\">
+                  //  alert(\"CSV File has been successfully Imported.\");
+                   // window.location = \"index.php\"
+              //  </script>";
+                }
+                
+                fclose($file);  
+            }
+        }
+            
+        break;
     }
+
+    header("location: ?".http_build_query($url));
 }
 ?>
