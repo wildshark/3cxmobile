@@ -1,0 +1,15 @@
+{
+    "domain_name":"",
+    "server_ip":"",
+    "db_connection":{
+        "host":"localhost",
+        "username":"root",
+        "password":"",
+        "database":"",
+        "port":"3360"
+    },
+    "license":{
+        "product_key":"",
+        "product_cerificate":""
+    }
+}
