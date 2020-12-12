@@ -4,6 +4,7 @@ session_start();
 
 include("control/global.php");
 include("module/connection.php");
+include("module/element.php");
 $conn = connection($config);
 
 if(!isset($_REQUEST['_submit'])){
@@ -14,7 +15,6 @@ if(!isset($_REQUEST['_submit'])){
         if((!isset($_COOKIE['token'])) || (!isset($_SESSION['token']))){
             $url["user"] = "log";
             $url['log'] = "off";
-
             header("location: ?".http_build_query($url));
         }else{
             switch($_REQUEST['_p']){
@@ -44,7 +44,7 @@ if(!isset($_REQUEST['_submit'])){
     switch($_REQUEST['_submit']){
 
         case"login";
-            $token = liecnse($config);
+            $token = uniqid(); // liecnse($config);
             $_SESSION['token'] = $token['data'];
             if($token == false){
                 echo "license error";
@@ -91,14 +91,9 @@ if(!isset($_REQUEST['_submit'])){
             $user_id = $_SESSION['user_id'];
             $filename=$_FILES["file"]["tmp_name"];    
             if($_FILES["file"]["size"] > 0){
-                
-                $file = fopen($filename, "r");
-                while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
-                    $sql = "INSERT into `mobile` (`file_id`, `user_id`, `mobile`) values ('".$file_id."','".$user_id."','".$getData[0]."')";
-                    $result = mysqli_query($conn, $sql);
-                }
+                $result = import_cvs_to_msysql($conn,$filename,$file_id,$user_id);
 
-                if(!isset($result)){
+                if(true !== $result){
                     $url['_p'] = "dashboard";
                     $url['token'] = $_SESSION['token'];
                     $url['e']=400;
@@ -108,11 +103,11 @@ if(!isset($_REQUEST['_submit'])){
                     //    </script>"; 
 
                 }else {
-                    $url['_p'] = "dashboard";
+                    $url['_p'] = "upload";
                     $url['file'] = $_REQUEST['file-name'];
-
+                    $url['id'] = $file_id;
                     $url['token'] = $_SESSION['token'];
-                    $url['e']=400;
+                    $url['e']=200;
                    // echo "<script type=\"text/javascript\">
                   //  alert(\"CSV File has been successfully Imported.\");
                    // window.location = \"index.php\"
@@ -122,10 +117,70 @@ if(!isset($_REQUEST['_submit'])){
                 fclose($file);  
             }
         }
-            
         break;
-    }
 
+        case"delete-file";
+            $id = $_REQUEST['id'];
+            $sql = "DELETE FROM `mobile_file` WHERE `file_id` = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i",$id);
+    
+            $file = $stmt->execute();
+
+            $sql = "DELETE FROM `mobile` WHERE `id` =?";
+            $stmt = $conn->prepare($sql);
+            $mobile = $stmt->bind_param("i",$id);
+    
+            if((false == $file) && (false == $mobile)){
+                $url['_p'] = "dashboard";
+                $url['token'] = $_SESSION['token'];
+                $url['e']=400;
+            }else{
+                $url['_p'] = "dashboard";
+                $url['token'] = $_SESSION['token'];
+                $url['e']=200;
+            } 
+        break;
+
+        case"delete-mobile";
+            $id = $_REQUEST['id'];
+            $sql = "DELETE FROM `mobile` WHERE `id` =?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i",$id);
+
+            if(false == $stmt->execute()){
+                $url['_p'] = "dashboard";
+                $url['token'] = $_SESSION['token'];
+                $url['e']=400;
+            }else{
+                $url['_p'] = "file";
+                $url['file'] = $_REQUEST['file'];
+                $url['token'] = $_SESSION['token'];
+                $url['e']=200;
+            } 
+        break;
+
+        case"delete-upload";
+        $id = $_REQUEST['mobile'];
+        $sql = "DELETE FROM `mobile` WHERE `id` =?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i",$id);
+
+        if(false == $stmt->execute()){
+            $url['_p'] = "dashboard";
+            $url['token'] = $_SESSION['token'];
+            $url['e']=400;
+        }else{
+            $url['_p'] = "upload";
+            $url['file'] = $_SESSION['file'];
+            $url['id'] = $_SESSION['id'];
+            $ur['mobile'] = $_REQUEST['mobile'];
+            $url['token'] = $_SESSION['token'];
+            $url['e']=200;
+        } 
+    break;
+    }
     header("location: ?".http_build_query($url));
 }
+CloseConn($conn);
 ?>

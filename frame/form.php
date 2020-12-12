@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
-	<title>Cloud Admin | Forms</title>
+	<title><?=$page['application']?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
@@ -329,19 +329,7 @@
 					</li>
 					<!-- END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
-					<li class="dropdown user" id="header-user">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<img alt="" src="img/avatars/avatar3.jpg">
-							<span class="username">John Doe</span>
-							<i class="fa fa-angle-down"></i>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
-							<li><a href="#"><i class="fa fa-cog"></i> Account Settings</a></li>
-							<li><a href="#"><i class="fa fa-eye"></i> Privacy Settings</a></li>
-							<li><a href="login.html"><i class="fa fa-power-off"></i> Log Out</a></li>
-						</ul>
-					</li>
+					<?=user_login_dropdown_menu()?>
 					<!-- END USER LOGIN DROPDOWN -->
 				</ul>
 				<!-- END TOP NAVIGATION MENU -->

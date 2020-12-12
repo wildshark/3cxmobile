@@ -1,3 +1,9 @@
+<?php
+
+$_SESSION['token'] = $_REQUEST['token'];
+$path = http_build_query($_REQUEST);
+
+?>
 				<div class="row">
 					<div id="content" class="col-lg-12">
 						<!-- PAGE HEADER-->
@@ -94,7 +100,7 @@
 																<td class='hidden-xs'>{$r['created_date']}</td>
 																<td class='center'>
 																	<a href='?_p=file&file={$id}&token={$_SESSION['token']}'>View</a> | 
-																	<a href='?_p=file&file={$id}&token={$_SESSION['token']}'>Delete</a>
+																	<a href='?_submit=delete-file&id={$r['file_id']}&{$path}'>Delete</a>
 																</td>
 															</tr>
 															";

@@ -1,4 +1,14 @@
-<div class="row">
+<?php
+if(isset($_REQUEST['id'])){
+	$_SESSION['file'] = $_REQUEST['file'];
+	$_SESSION['id'] = $_REQUEST['id'];
+	$_SESSION['token'] = $_REQUEST['token'];
+	$path = http_build_query($_REQUEST);
+}else{
+	$path ="";
+}
+?>
+				<div class="row">
 					<div id="content" class="col-lg-12">
 						<!-- PAGE HEADER-->
 						<div class="row">
@@ -135,7 +145,7 @@
                                                                             <tr>
                                                                                 <td>{$n}</td>
                                                                                 <td>{$r['mobile']}</td>
-                                                                                <td><a href='?_p=file&file={$id}&token={$_SESSION['token']}'>Delete</a></td>
+                                                                                <td><a href='?_submit=delete-upload&mobile={$r['id']}&{$path}'>Delete</a></td>
                                                                             </tr>";
                                                                     }
                                                                  }

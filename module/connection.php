@@ -6,6 +6,17 @@ if(!file_exists("config.json")){
     $config = json_decode(file_get_contents("config.json"),true);
 }
 
+function import_cvs_to_msysql($conn,$filename,$file_id,$user_id){
+
+    $file = fopen($filename, "r");
+    while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
+        $sql = "INSERT into `mobile` (`file_id`, `user_id`, `mobile`) values ('".$file_id."','".$user_id."','".$getData[0]."')";
+        $result = mysqli_query($conn,$sql);
+    }
+
+    return $result;
+}
+
 function liecnse($config){
 
     $postdata = array(

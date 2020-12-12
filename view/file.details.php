@@ -1,4 +1,10 @@
-<div class="row">
+<?php
+$_SESSION['file'] = $_REQUEST['file'];
+$_SESSION['token'] = $_REQUEST['token'];
+$path = http_build_query($_REQUEST);
+
+?>
+				<div class="row">					
 					<div id="content" class="col-lg-12">
 						<!-- PAGE HEADER-->
 						<div class="row">
@@ -74,6 +80,7 @@
 															<tr class='gradeA'>
 																<td>Null</td>
 																<td>Null</td>
+																<td>Null</td>
 																<td class='hidden-xs'>Null</td>
 																<td class='center'>
 																	<a href='#'>Delete</a>
@@ -90,15 +97,15 @@
                                                             $md5 = md5($r['mobile']);
 															$id = bin2hex($r['file_id']."/".$r['created_date']);
 															echo"
-															<tr class='gradeA'>
-                                                                <td>{$n}</td>
-                                                                <td>{$r['created_date']}</td>
-																<td>{$r['mobile']}</td>
-																<td class='hidden-xs'>{$md5}</td>
-																<td class='center'>
-																	<a href='?_p=file&file={$id}&token={$_SESSION['token']}'>Delete</a>
-																</td>
-															</tr>
+																<tr class='gradeA'>
+																	<td>{$n}</td>
+																	<td>{$r['created_date']}</td>
+																	<td>{$r['mobile']}</td>
+																	<td class='hidden-xs'>{$md5}</td>
+																	<td class='center'>
+																		<a href='?_submit=delete-mobile&id={$r['id']}&{$path}'>Delete</a>
+																	</td>
+																</tr>
 															";
 														}
 													 }
