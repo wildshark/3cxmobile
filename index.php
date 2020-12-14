@@ -33,7 +33,8 @@ if(!isset($_REQUEST['_submit'])){
                     $file = hex2bin($_GET['file']);
                     $file = explode("/",$file);
                     $id = $file[0];
-                    $date = $file[1];
+                    $file_name= $file[1];
+                    $date = $file[2];
                     $context = "view/file.details.php";
                     require("frame/table.php");
                 break;

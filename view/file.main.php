@@ -17,13 +17,13 @@ $path = http_build_query($_REQUEST);
 											<a href="index.html">Home</a>
 										</li>
 										<li>
-											<a href="#">Tables</a>
+											<a href="#"><?=ucfirst($_GET['_p'])?></a>
 										</li>
-										<li>Dynamic Tables</li>
+										<li>Content</li>
 									</ul>
 									<!-- /BREADCRUMBS -->
 									<div class="clearfix">
-										<h3 class="content-title pull-left">Dynamic Tables</h3>
+										<h3 class="content-title pull-left">Data Files</h3>
 									</div>
 									<div class="description">Dynamic Tables and Modals</div>
 								</div>
@@ -91,7 +91,7 @@ $path = http_build_query($_REQUEST);
 															}else{
 																$n = 1;
 															}
-															$id = bin2hex($r['file_id']."/".$r['created_date']);
+															$id = bin2hex($r['file_id']."/".$r['file']."/".$r['created_date']);
 															echo"
 															<tr class='gradeA'>
 																<td>{$n}</td>

@@ -50,7 +50,7 @@
 				</div>
 				<!-- BEGIN TOP NAVIGATION MENU -->					
 				<ul class="nav navbar-nav pull-right">
-					<!-- BEGIN NOTIFICATION DROPDOWN -->	
+					<!-- BEGIN NOTIFICATION DROPDOWN 	
 					<li class="dropdown" id="header-notification">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-bell"></i>
@@ -138,8 +138,8 @@
 							</li>
 						</ul>
 					</li>
-					<!-- END NOTIFICATION DROPDOWN -->
-					<!-- BEGIN INBOX DROPDOWN -->
+					 END NOTIFICATION DROPDOWN -->
+					<!-- BEGIN INBOX DROPDOWN
 					<li class="dropdown" id="header-message">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-envelope"></i>
@@ -203,8 +203,8 @@
 							</li>
 						</ul>
 					</li>
-					<!-- END INBOX DROPDOWN -->
-					<!-- BEGIN TODO DROPDOWN -->
+					END INBOX DROPDOWN -->
+					<!-- BEGIN TODO DROPDOWN 
 					<li class="dropdown" id="header-tasks">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-tasks"></i>
@@ -290,9 +290,9 @@
 							</li>
 						</ul>
 					</li>
-					<!-- END TODO DROPDOWN -->
+					END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
-					<?=user_login_dropdown_menu()?>
+					<?//=user_login_dropdown_menu()?>
 					<!-- END USER LOGIN DROPDOWN -->
 				</ul>
 				<!-- END TOP NAVIGATION MENU -->

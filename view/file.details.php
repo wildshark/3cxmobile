@@ -17,10 +17,10 @@ $path = http_build_query($_REQUEST);
 									<ul class="breadcrumb">
 										<li>
 											<i class="fa fa-home"></i>
-											<a href="index.html">Home</a>
+											<a href="index.html">File</a>
 										</li>
 										<li>
-											<a href="#">Tables</a>
+											<a href="#"><?=ucfirst($file_name)?></a>
 										</li>
 										<li>Dynamic Tables</li>
 									</ul>
