@@ -52,7 +52,7 @@ if(!isset($_REQUEST['_submit'])){
             }else{
                 $q[] = $_REQUEST['username'];
                 $q[] = $_REQUEST['password'];
-                $sql ="SELECT * FROM `user_account` WHERE `username`=? AND `password`=?";
+                $sql ="SELECT * FROM `get_user_account` WHERE `username`=? AND `password`=?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss",$q[0],$q[1]);
         
@@ -64,9 +64,10 @@ if(!isset($_REQUEST['_submit'])){
                     require "frame/login.php";
                 } else{
                     $r = $result->fetch_assoc();
-                    $_SESSION['user_id'] = $r['user_id'];
+                    $_SESSION['user_id'] = $r['user_token'];
                     setcookie("token", $token['data'], time()+3600);
                     setcookie("username", $_REQUEST['username']);
+                    setcookie("user_id", $r['user_id']);
                     $url['_p'] = "dashboard";
                     $url['token'] = $_SESSION['token'];
                     $url['e']=200;
@@ -75,7 +76,9 @@ if(!isset($_REQUEST['_submit'])){
         break;
 
         case"upload";
-        $q[] = $_SESSION['user_id'];
+        echo $q[] = $_COOKIE['user_id'];
+        exit();
+        
         $q[] = $_REQUEST['file-name'];
         $q[] = $_FILES["file"]["tmp_name"];
         $q[] = date("Y-m-d H:i:s");

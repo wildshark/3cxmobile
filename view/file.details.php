@@ -2,8 +2,10 @@
 $_SESSION['file'] = $_REQUEST['file'];
 $_SESSION['token'] = $_REQUEST['token'];
 $path = http_build_query($_REQUEST);
+$query = explode("/",hex2bin($_GET['file']));
 
 ?>
+
 				<div class="row">					
 					<div id="content" class="col-lg-12">
 						<!-- PAGE HEADER-->
@@ -20,15 +22,15 @@ $path = http_build_query($_REQUEST);
 											<a href="index.html">File</a>
 										</li>
 										<li>
-											<a href="#"><?=ucfirst($file_name)?></a>
+											<a href="#"><?=ucfirst($query[2])?></a>
 										</li>
 										<li>Dynamic Tables</li>
 									</ul>
 									<!-- /BREADCRUMBS -->
 									<div class="clearfix">
-										<h3 class="content-title pull-left">Dynamic Tables</h3>
+										<h3 class="content-title pull-left">File: <?=ucfirst($query[2])?> </h3>
 									</div>
-									<div class="description">Dynamic Tables and Modals</div>
+									<div class="description">File Created <?=date("H:i:sa d-m-Y",strtotime($query[3]))?> </div>
 								</div>
 							</div>
 						</div>
@@ -37,9 +39,41 @@ $path = http_build_query($_REQUEST);
 						<div class="row">
 							<div class="col-md-12">
 								<!-- BOX -->
+								<div class="box border">
+									<div class="box-title">
+										<h4><i class="fa fa-bars"></i><span class="hidden-inline-mobile">SQL Code: Query Data By</span></h4>
+									</div>
+									<div class="box-body">
+										<div class="tabbable header-tabs">
+										  <ul class="nav nav-tabs">
+										  <li class="active"><a href="#box_tab1" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-inline-mobile">System User</span></a></li>
+											 <li><a href="#box_tab2" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-inline-mobile">My File</span></a></li>
+											 
+											 <li><a href="#box_tab3" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-inline-mobile"> Date</span></a></li>
+										  </ul>
+										  <div class="tab-content">
+											 <div class="tab-pane active" id="box_tab1">
+											 	<p>Query Using #User</p>
+												<p> SELECT get_mobile_list.mobile FROM get_mobile_list WHERE get_mobile_list.user_id = '<?=$query[1]?>' </p>												
+											 </div>
+											 <div class="tab-pane" id="box_tab2">												
+											 	<p>Query Using #File</p>
+												<p> SELECT get_mobile_list.mobile FROM get_mobile_list WHERE get_mobile_list.file_id = '<?=$query[0]?>' </p>
+											 </div>
+											 <div class="tab-pane" id="box_tab3">												
+											 	<p>Query Using #File</p>
+												<p> SELECT get_mobile_list.mobile FROM get_mobile_list WHERE get_mobile_list.curr_date = '<?=$query[3]?>' </p>
+											 </div>
+										  </div>
+									   </div>
+									</div>
+								</div>
+							</div>	
+							<div class="col-md-12">
+								<!-- BOX -->
 								<div class="box border green">
 									<div class="box-title">
-										<h4><i class="fa fa-table"></i>Dynamic Data Tables</h4>
+										<h4><i class="fa fa-table"></i>Mobile Number(s)</h4>
 										<div class="tools hidden-xs">
 											<a href="#box-config" data-toggle="modal" class="config">
 												<i class="fa fa-cog"></i>

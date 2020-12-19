@@ -23,9 +23,9 @@ $path = http_build_query($_REQUEST);
 									</ul>
 									<!-- /BREADCRUMBS -->
 									<div class="clearfix">
-										<h3 class="content-title pull-left">Data Files</h3>
+										<h3 class="content-title pull-left">CSV Data Files</h3>
 									</div>
-									<div class="description">Dynamic Tables and Modals</div>
+									<div class="description">Clock <?=date("H:i:sa d-M-Y")?></div>
 								</div>
 							</div>
 						</div>
@@ -36,7 +36,7 @@ $path = http_build_query($_REQUEST);
 								<!-- BOX -->
 								<div class="box border green">
 									<div class="box-title">
-										<h4><i class="fa fa-table"></i>Dynamic Data Tables</h4>
+										<h4><i class="fa fa-table"></i>CSV Directory</h4>
 										<div class="tools hidden-xs">
 											<a href="#box-config" data-toggle="modal" class="config">
 												<i class="fa fa-cog"></i>
@@ -91,7 +91,7 @@ $path = http_build_query($_REQUEST);
 															}else{
 																$n = 1;
 															}
-															$id = bin2hex($r['file_id']."/".$r['file']."/".$r['created_date']);
+															$id = bin2hex($r['file_id']."/".$r['user_id']."/".$r['file']."/".$r['created_date']);
 															echo"
 															<tr class='gradeA'>
 																<td>{$n}</td>

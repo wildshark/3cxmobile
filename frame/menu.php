@@ -14,10 +14,10 @@
 								</a>
 								<ul class="sub">
                                     <?php
-                                        $sql="SELECT * FROM `mobile_file` ORDER BY `file_id` DESC LIMIT 0,15";
+                                        $sql="SELECT * FROM `get_mobile_file` ORDER BY `file_id` DESC LIMIT 0,15";
                                         $stmt = $conn->prepare($sql);
-                                       // $stmt->bind_param("i",$r[0]);
-                                
+                                       //$stmt->bind_param("i",$r[0]);
+
                                         $stmt->execute();
                                         
                                         $result = $stmt->get_result();
@@ -25,7 +25,7 @@
                                             echo"<li><a class='' href='#'><span class='sub-menu-text'>Null</span></a></li>";
                                         } else{
                                             while($r = $result->fetch_assoc()){
-                                                $id = bin2hex($r['file_id']."/".$r['file']."/".$r['created_date']);
+                                                $id = bin2hex($r['file_id']."/".$r['user_id']."/".$r['file']."/".$r['created_date']);
                                                 echo"<li><a class='' href='?_p=file&file={$id}&token={$_SESSION['token']}'><span class='sub-menu-text'>{$r['file']}</span></a></li>";
                                             }
                                         }
