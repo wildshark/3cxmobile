@@ -610,7 +610,7 @@
 						<!-- /SIDEBAR QUICK-LAUNCH -->
 						
 						<!-- SIDEBAR MENU -->
-						<?php require("menu.php")?>
+						<?php require($page['menu'])?>
 						<!-- /SIDEBAR MENU -->
 					</div>
 				</div>

@@ -1,52 +1,64 @@
 <?php
-
 session_start();
 
 include("control/global.php");
 include("module/connection.php");
 include("module/element.php");
+include("module/dataset.php");
 $conn = connection($config);
 
 if(!isset($_REQUEST['_submit'])){
-    if(!isset($_REQUEST['_p'])){
-        session_destroy();
-        require "frame/login.php";
-    }else{
-        if((!isset($_COOKIE['token'])) || (!isset($_SESSION['token']))){
-            $url["user"] = "log";
-            $url['log'] = "off";
-            header("location: ?".http_build_query($url));
+    if(!isset($_REQUEST['_admin'])){
+        if(!isset($_REQUEST['_p'])){
+            session_destroy();
+            require "frame/login.php";
         }else{
-            switch($_REQUEST['_p']){
+            if((!isset($_COOKIE['token'])) || (!isset($_SESSION['token']))){
+                $url["user"] = "log";
+                $url['log'] = "off";
+                header("location: ?".http_build_query($url));
+            }else{
+                switch($_REQUEST['_p']){
 
-                case"dashboard";
-                    $context = "view/file.main.php";
-                    require("frame/table.php");
-                break;
+                    case"dashboard";
+                        $context = "view/file.main.php";
+                        require("frame/table.php");
+                    break;
 
-                case"upload";
-                    $context = "view/upload.php";
-                    require("frame/form.php");
-                break;
+                    case"upload";
+                        $context = "view/upload.php";
+                        require("frame/form.php");
+                    break;
 
-                case"file";
-                    $file = hex2bin($_GET['file']);
-                    $file = explode("/",$file);
-                    $id = $file[0];
-                    $file_name= $file[1];
-                    $date = $file[2];
-                    $context = "view/file.details.php";
-                    require("frame/table.php");
-                break;
-            }
-        }   
+                    case"file";
+                        $file = hex2bin($_GET['file']);
+                        $file = explode("/",$file);
+                        $id = $file[0];
+                        $file_name= $file[1];
+                        $date = $file[2];
+                        $context = "view/file.details.php";
+                        require("frame/table.php");
+                    break;
+                }
+            }   
+        }
+    }else{
+        $page['menu'] = "admin/menu.php";
+        switch($_REQUEST['_admin']){
+
+            case"dashboard";
+                $context = "admin/dashboard.php";
+                require("frame/dashboard.php");
+            break;
+
+        }
     }
 }else{
     switch($_REQUEST['_submit']){
 
         case"login";
             $token = uniqid(); // liecnse($config);
-            $_SESSION['token'] = $token['data'];
+            $_SESSION['token'] =  $token;//$token['data'];
             if($token == false){
                 echo "license error";
             }else{
@@ -68,59 +80,63 @@ if(!isset($_REQUEST['_submit'])){
                     setcookie("token", $token['data'], time()+3600);
                     setcookie("username", $_REQUEST['username']);
                     setcookie("user_id", $r['user_id']);
-                    $url['_p'] = "dashboard";
-                    $url['token'] = $_SESSION['token'];
-                    $url['e']=200;
+                    if($r['role'] === "admin"){
+                        $url['_admin'] = "dashboard";
+                        $url['token'] = $_SESSION['token'];
+                        $url['e']=200;
+                    }else{
+                        $url['_p'] = "dashboard";
+                        $url['token'] = $_SESSION['token'];
+                        $url['e']=200;
+                    }
                 }
             }        
         break;
 
         case"upload";
-        echo $q[] = $_COOKIE['user_id'];
-        exit();
-        
-        $q[] = $_REQUEST['file-name'];
-        $q[] = $_FILES["file"]["tmp_name"];
-        $q[] = date("Y-m-d H:i:s");
-        $sql="INSERT INTO `mobile_file`(`user_id`, `file`) VALUES (?,?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss",$q[0],$q[1]);
-        
-        if(false == $stmt->execute()){
-            $url['_p'] = "upload";
-            $url['token'] = $_SESSION['token'];
-            $url['e']=400;
-        }else{
-            $file_id = $conn->insert_id;
-            $user_id = $_SESSION['user_id'];
-            $filename=$_FILES["file"]["tmp_name"];    
-            if($_FILES["file"]["size"] > 0){
-                $result = import_cvs_to_msysql($conn,$filename,$file_id,$user_id);
+            $q[] = $_COOKIE['user_id'];
+            $q[] = $_REQUEST['file-name'];
+            $q[] = $_FILES["file"]["tmp_name"];
+            $q[] = date("Y-m-d H:i:s");
+            $sql="INSERT INTO `mobile_file`(`user_id`, `file`) VALUES (?,?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss",$q[0],$q[1]);
+            
+            if(false == $stmt->execute()){
+                $url['_p'] = "upload";
+                $url['token'] = $_SESSION['token'];
+                $url['e']=400;
+            }else{
+                $file_id = $conn->insert_id;
+                $user_id = $_SESSION['user_id'];
+                $filename=$_FILES["file"]["tmp_name"];    
+                if($_FILES["file"]["size"] > 0){
+                    $result = import_cvs_to_msysql($conn,$filename,$file_id,$user_id);
 
-                if(true !== $result){
-                    $url['_p'] = "dashboard";
-                    $url['token'] = $_SESSION['token'];
-                    $url['e']=400;
-                   // echo "<script type=\"text/javascript\">
-                    //    alert(\"Invalid File:Please Upload CSV File.\");
-                    //    window.location = \"index.php\"
-                    //    </script>"; 
+                    if(true !== $result){
+                        $url['_p'] = "dashboard";
+                        $url['token'] = $_SESSION['token'];
+                        $url['e']=400;
+                    // echo "<script type=\"text/javascript\">
+                        //    alert(\"Invalid File:Please Upload CSV File.\");
+                        //    window.location = \"index.php\"
+                        //    </script>"; 
 
-                }else {
-                    $url['_p'] = "upload";
-                    $url['file'] = $_REQUEST['file-name'];
-                    $url['id'] = $file_id;
-                    $url['token'] = $_SESSION['token'];
-                    $url['e']=200;
-                   // echo "<script type=\"text/javascript\">
-                  //  alert(\"CSV File has been successfully Imported.\");
-                   // window.location = \"index.php\"
-              //  </script>";
+                    }else {
+                        $url['_p'] = "upload";
+                        $url['file'] = $_REQUEST['file-name'];
+                        $url['id'] = $file_id;
+                        $url['token'] = $_SESSION['token'];
+                        $url['e']=200;
+                    // echo "<script type=\"text/javascript\">
+                    //  alert(\"CSV File has been successfully Imported.\");
+                    // window.location = \"index.php\"
+                //  </script>";
+                    }
+
+                    fclose($file);  
                 }
-
-                fclose($file);  
             }
-        }
         break;
 
         case"delete-file";

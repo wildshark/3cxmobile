@@ -321,11 +321,11 @@
 						<!-- /SEARCH BAR -->
 						
 						<!-- SIDEBAR QUICK-LAUNCH -->
-						<!-- <div id="quicklaunch">
+						<!-- <div id="quicklaunch"-->
 						<!-- /SIDEBAR QUICK-LAUNCH -->
 						
 						<!-- SIDEBAR MENU -->
-						<?php require("menu.php")?>
+						<?php require($page['menu'])?>
 						<!-- /SIDEBAR MENU -->
 					</div>
 				</div>
