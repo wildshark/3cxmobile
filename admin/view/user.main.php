@@ -80,10 +80,10 @@ $path = http_build_query($_REQUEST);
 																	<a href='#'>Delete</a>
 																</td>
 															</tr>";
-													}else{														
-														$sql="SELECT * FROM `get_user_account` ORDER BY `user_id` DESC LIMIT 0,1000";
+													}else{							
+														$string = "user";							
+														$sql="SELECT * FROM `get_user_account` WHERE `role` = 'user'";
 														$stmt = $conn->prepare($sql);
-														//$stmt->bind_param("s",$_SESSION['user_id']);
 												
 														$stmt->execute();
 														
@@ -110,7 +110,11 @@ $path = http_build_query($_REQUEST);
 																	$n = 1;
 																}
 																$id = bin2hex(json_encode($r));
-																$del = "";//bin2hex($_COOKIE['user_id']."/".$r['file']);
+																if($r['active'] == 1){
+																	$button = "<a href='?_submit=user-status&status={$id}'>Active</a>";
+																}else{
+																	$button = "<a href='?_submit=user-status&status={$id}'>Passive</a>";
+																}
 																echo"
 																<tr class='gradeA'>
 																	<td>{$n}</td>
@@ -119,8 +123,9 @@ $path = http_build_query($_REQUEST);
 																	<td class='hidden-xs'>{$r['username']}</td>
 																	<td class='hidden-xs'>{$r['email']}</td>
 																	<td class='center'>
-																		<a href='?_admin=user-details&user={$id}&token={$_SESSION['token']}'>View</a> | 
-																		<a href='?_submit=delete-file&id={$del}&{$path}'>Delete</a>
+																		<a href='?_su=user-details&user={$id}&token={$_SESSION['token']}'>View</a> | 
+																		{$button} | 
+																		<a href='?_submit=delete-user&delete={$id}&{$path}'>Delete</a>
 																	</td>
 																</tr>
 																";

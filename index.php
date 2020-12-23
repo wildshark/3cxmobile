@@ -44,6 +44,8 @@ if(!isset($_REQUEST['_submit'])){
         }
     }else{
         $page['menu'] = "admin/menu.php";
+        setcookie("_admin",$_REQUEST['_admin']);
+        setcookie("token",$_REQUEST['token']);
         switch($_REQUEST['_admin']){
 
             case"dashboard";
@@ -172,6 +174,13 @@ if(!isset($_REQUEST['_submit'])){
             }
         break;
 
+        case"user-status";
+            $status = json_decode(hex2bin($_REQUEST['status']),TRUE);
+            var_dump($status);
+
+        
+        break;
+
         case"delete-file";
             $r = explode("/",bin2hex($_REQUEST['id']));
             
@@ -229,6 +238,38 @@ if(!isset($_REQUEST['_submit'])){
             $url['file'] = $_SESSION['file'];
             $url['id'] = $_SESSION['id'];
             $ur['mobile'] = $_REQUEST['mobile'];
+            $url['token'] = $_SESSION['token'];
+            $url['e']=200;
+        } 
+    break;
+
+    case"delete-user";
+        $delete = json_decode(hex2bin($_REQUEST['delete']),TRUE);
+      
+        $sql = "DELETE FROM `user_account` WHERE `user_id` = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i",$delete['user_id']); 
+
+        $account = $stmt->execute();
+
+        $sql = "DELETE FROM `mobile` WHERE `user_id` =?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i",$delete['user_id']);
+        
+        $mobile = $stmt->execute();
+        
+        $sql = "DELETE FROM `mobile_file` WHERE `user_id` =?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i",$delete['user_id']);
+
+        $file = $stmt->execute();
+
+        if(false == $file || $mobile == false || $account = false){
+            $url['_p'] = "dashboard";
+            $url['token'] = $_SESSION['token'];
+            $url['e']=400;
+        }else{
+            $url['_admin'] = "user-account";
             $url['token'] = $_SESSION['token'];
             $url['e']=200;
         } 

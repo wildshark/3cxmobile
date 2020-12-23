@@ -1,6 +1,6 @@
                         <ul>
 							<li>
-								<a href="?_p=dashboard&e=100&token=<?=$_SESSION['token']?>">
+								<a href="?_admin=dashboard&e=100&token=<?=$_SESSION['token']?>">
 									<i class="fa fa-tachometer fa-fw"></i> <span class="menu-text">Dashboard</span>
 									<span class="selected"></span>
 								</a>					
