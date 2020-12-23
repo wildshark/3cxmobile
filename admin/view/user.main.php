@@ -123,7 +123,7 @@ $path = http_build_query($_REQUEST);
 																	<td class='hidden-xs'>{$r['username']}</td>
 																	<td class='hidden-xs'>{$r['email']}</td>
 																	<td class='center'>
-																		<a href='?_su=user-details&user={$id}&token={$_SESSION['token']}'>View</a> | 
+																		<a href='?_admin=user-details&user={$id}&token={$_SESSION['token']}'>View</a> | 
 																		{$button} | 
 																		<a href='?_submit=delete-user&delete={$id}&{$path}'>Delete</a>
 																	</td>

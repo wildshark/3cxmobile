@@ -606,7 +606,7 @@
 						<!-- /SEARCH BAR -->
 						
 						<!-- SIDEBAR QUICK-LAUNCH -->
-						<!-- <div id="quicklaunch">
+						<!-- <div id="quicklaunch"-->
 						<!-- /SIDEBAR QUICK-LAUNCH -->
 						
 						<!-- SIDEBAR MENU -->

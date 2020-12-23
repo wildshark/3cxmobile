@@ -18,6 +18,7 @@ if(!isset($_REQUEST['_submit'])){
                 $url['log'] = "off";
                 header("location: ?".http_build_query($url));
             }else{
+                $page['menu'] = "view/menu.php";
                 switch($_REQUEST['_p']){
 
                     case"dashboard";
@@ -127,7 +128,6 @@ if(!isset($_REQUEST['_submit'])){
             }
         break;
 
-
         case"upload";
             $q[] = $_COOKIE['user_id'];
             $q[] = $_REQUEST['file-name'];
@@ -176,9 +176,25 @@ if(!isset($_REQUEST['_submit'])){
 
         case"user-status";
             $status = json_decode(hex2bin($_REQUEST['status']),TRUE);
-            var_dump($status);
+            if($status['active'] == 1){
+                $active = '2';
+            }else{
+                $active = '1';
+            }
 
-        
+            $sql = "UPDATE `user_account` SET `active` = ? WHERE `user_id` = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss",$active,$status['user_id']);
+    
+            if(false == $stmt->execute()){
+                $url['_admin'] = "dashboard";
+                $url['token'] = $_SESSION['token'];
+                $url['e']=400;
+            }else{
+                $url['_admin'] = "user-account";
+                $url['token'] = $_SESSION['token'];
+                $url['e']=200;
+            }
         break;
 
         case"delete-file";
