@@ -58,12 +58,8 @@ if(!isset($_REQUEST['_submit'])){
 
             case"user-details";
                 $user = json_decode(hex2bin($_REQUEST['user']),TRUE); 
-                print_r($user);
                 $context = "admin/view/user.details.php";
                 require("frame/table.php");
-               
-
-            
             break;
 
         }
