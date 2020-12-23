@@ -118,10 +118,10 @@ if(isset($_REQUEST['id'])){
                                                                 </tr>
                                                                 ";
                                                             }else{
-                                                               
-                                                                $sql ="SELECT * FROM `get_mobile_list` WHERE `file`=? LIMIT 0,1000";
+                                                                $id = $_GET['id'];
+                                                                $sql ="SELECT * FROM `get_mobile_list` WHERE `file_id`=? LIMIT 0,1000";
                                                                 $stmt = $conn->prepare($sql);
-                                                                $stmt->bind_param("s",$_GET['file']);
+                                                                $stmt->bind_param("i",$id);
                                                          
                                                                  $stmt->execute();
                                                                  

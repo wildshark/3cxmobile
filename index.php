@@ -51,6 +51,21 @@ if(!isset($_REQUEST['_submit'])){
                 require("frame/dashboard.php");
             break;
 
+            case"user-account";
+                $context = "admin/view/user.main.php";
+                require("frame/table.php");
+            break;
+
+            case"user-details";
+                $user = json_decode(hex2bin($_REQUEST['user']),TRUE); 
+                print_r($user);
+                $context = "admin/view/user.details.php";
+                require("frame/table.php");
+               
+
+            
+            break;
+
         }
     }
 }else{
@@ -93,6 +108,28 @@ if(!isset($_REQUEST['_submit'])){
             }        
         break;
 
+        case"sign-up";
+            $q[] = $_REQUEST['full-name'];
+            $q[] = $_REQUEST['username'];
+            $q[] = $_REQUEST['password']; 
+            $q[] = $_REQUEST['email'];
+            $q[] = "user";
+            $q[] = "1";
+            
+            $sql="INSERT INTO `user_account`(`full_name`, `username`, `password`, `email`, `role`, `active`) VALUES (?,?,?,?,?,?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssss",$q[0],$q[1],$q[2],$q[3],$q[4],$q[5]);
+
+            if(false == $stmt->execute()){
+                $url['_user'] = "login";
+                $url['e']=500;
+            }else{
+                $url['_user'] = "login";
+                $url['e']=200;
+            }
+        break;
+
+
         case"upload";
             $q[] = $_COOKIE['user_id'];
             $q[] = $_REQUEST['file-name'];
@@ -108,7 +145,7 @@ if(!isset($_REQUEST['_submit'])){
                 $url['e']=400;
             }else{
                 $file_id = $conn->insert_id;
-                $user_id = $_SESSION['user_id'];
+                $user_id = $_COOKIE['user_id'];
                 $filename=$_FILES["file"]["tmp_name"];    
                 if($_FILES["file"]["size"] > 0){
                     $result = import_cvs_to_msysql($conn,$filename,$file_id,$user_id);
@@ -140,16 +177,17 @@ if(!isset($_REQUEST['_submit'])){
         break;
 
         case"delete-file";
-            $id = $_REQUEST['id'];
-            $sql = "DELETE FROM `mobile_file` WHERE `file_id` = ?";
+            $r = explode("/",bin2hex($_REQUEST['id']));
+            
+            $sql = "DELETE FROM `mobile_file` WHERE `user_id` = ? AND `file`=?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i",$id);
+            $stmt->bind_param("ss",$r[0],$r[1]);
     
             $file = $stmt->execute();
 
-            $sql = "DELETE FROM `mobile` WHERE `id` =?";
+            $sql = "DELETE FROM `mobile_list` WHERE `id` =?";
             $stmt = $conn->prepare($sql);
-            $mobile = $stmt->bind_param("i",$id);
+            $mobile = $stmt->bind_param("s",$id);
     
             if((false == $file) && (false == $mobile)){
                 $url['_p'] = "dashboard";

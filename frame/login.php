@@ -100,26 +100,26 @@
 							<div class="login-box-plain">
 								<h2 class="bigintro">Register</h2>
 								<div class="divide-40"></div>
-								<form role="form">
+								<form role="form" method="post" action="index.php">
 								  <div class="form-group">
 									<label for="exampleInputName">Full Name</label>
 									<i class="fa fa-font"></i>
-									<input type="text" class="form-control" id="exampleInputName">
+									<input type="text" name="full-name" class="form-control" id="exampleInputName">
 								  </div>
 								  <div class="form-group">
 									<label for="exampleInputUsername">Username</label>
 									<i class="fa fa-user"></i>
-									<input type="text" class="form-control" id="exampleInputUsername">
+									<input type="text" name="username" class="form-control" id="exampleInputUsername">
 								  </div>
 								  <div class="form-group">
 									<label for="exampleInputEmail1">Email address</label>
 									<i class="fa fa-envelope"></i>
-									<input type="email" class="form-control" id="exampleInputEmail1">
+									<input type="email" name="email" class="form-control" id="exampleInputEmail1">
 								  </div>
 								  <div class="form-group"> 
 									<label for="exampleInputPassword1">Password</label>
 									<i class="fa fa-lock"></i>
-									<input type="password" class="form-control" id="exampleInputPassword1">
+									<input type="password" name='password' class="form-control" id="exampleInputPassword1">
 								  </div>
 								  <div class="form-group"> 
 									<label for="exampleInputPassword2">Repeat Password</label>
@@ -127,8 +127,8 @@
 									<input type="password" class="form-control" id="exampleInputPassword2">
 								  </div>
 								  <div class="form-actions">
-									<label class="checkbox"> <input type="checkbox" class="uniform" value=""> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
-									<button type="submit" class="btn btn-success">Sign Up</button>
+									<label class="checkbox"> <input type="checkbox"  class="uniform" value=""> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+									<button type="submit" name="_submit" value="sign-up" class="btn btn-success">Sign Up</button>
 								  </div>
 								</form>
 								<!-- SOCIAL REGISTER -->
